@@ -1,19 +1,21 @@
+import google.generativeai as genai
+
+# Skrinshotingizdagi API kalitni o'zim joyladim
+API_KEY = "AlzaSyAk8NKPaGwHKN44w7q3hbgSTUTTtVaLB0o"
+genai.configure(api_key=API_KEY)
+
+# Gemini 1.5 Flash - eng aqlli va tezkor model
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+# Suhbat tarixi (xotira) uchun chat sessiyasini boshlaymiz
+chat_session = model.start_chat(history=[])
+
 def get_ai_answer(user_input):
-    """Foydalanuvchi savoliga qarab aqlli javob qaytarish"""
-    text = user_input.lower().strip()
-    
-    # Savol-javoblar bazasi
-    if "salom" in text:
-        return "Va alaykum assalom! Sizga qanday yordam bera olaman?"
-    
-    elif "ronaldo kim" in text or "ronaldo haqida" in text:
-        return "Krishtianu Ronaldu — Portugaliyalik futbol afsonasi, ko'plab 'Oltin to'p' sohibi va tarixdagi eng kuchli hujumchilardan biri."
-    
-    elif "sen kimsan" in text or "isming nima" in text:
-        return "Men Jasurbek tomonidan yaratilgan aqlli yordamchiman. Sizga Gemini kabi aqlli javob berishga harakat qilaman."
-    
-    elif "nima qila olasan" in text:
-        return "Men savollarga javob berishim, rasmlarni tahlil qilishim (limit bilan) va siz bilan suhbatlashishim mumkin."
-    
-    else:
-        return "Bu juda qiziqarli savol! Men hozircha bu haqda o'rganyapman, lekin sizga yordam berishga harakat qilaman."
+    """Har qanday savolga Google Gemini orqali aqlli javob berish"""
+    try:
+        # AI-dan javob so'raymiz
+        response = chat_session.send_message(user_input)
+        return response.text
+    except Exception as e:
+        # Xatolik bo'lsa (masalan, internet uzilsa)
+        return "Kechirasiz, muloqotda kichik xatolik bo'ldi. Iltimos, qaytadan urinib ko'ring."
