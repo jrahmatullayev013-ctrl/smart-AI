@@ -14,3 +14,4 @@ def get_ai_answer(user_input):
         response = chat_session.send_message(user_input)
         return response.text
     except Exception as e:
+        return f"Kechirasiz, muloqotda xatolik bo'ldi. Xato: {str(e)}"
