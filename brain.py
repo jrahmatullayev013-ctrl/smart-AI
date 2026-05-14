@@ -1,7 +1,7 @@
 import google.generativeai as genai
 
 # Siz yuborgan yangi va haqiqiy API kalit
-API_KEY = "AIzaSyBr4lx82LSqb0Qhj7iP0noduOzvZJh2Rtc"
+API_KEY = "AIzaSyAZm4Ei9_Q4jUqich9sg7EpcWgmZJUYg2I"
 genai.configure(api_key=API_KEY)
 
 # Gemini 1.5 Flash - eng aqlli va tezkor LLM modelini ulaymiz
