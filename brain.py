@@ -1,17 +1,14 @@
 import google.generativeai as genai
 
-# Sizning Google Gemini API kalitingiz
 API_KEY = "AlzaSyAk8NKPaGwHKN44w7q3hbgSTUTTtVaLB0o"
 genai.configure(api_key=API_KEY)
 
-# Gemini 1.5 Flash modelini sozlash
-model = genai.GenerativeModel('gemini-1.5-flash')
-chat_session = model.start_chat(history=[])
-
 def get_ai_answer(user_input):
-    """Google Gemini orqali har qanday savolga aqlli javob berish"""
+    """Barcha savolga aqlli javob berish"""
     try:
+        # AI-dan javob so'raymiz
         response = chat_session.send_message(user_input)
         return response.text
     except Exception as e:
+        # Agar kalitda yoki ulanishda xato bo'lsa, aniq xatoni ko'rsatadi
         return f"Kechirasiz, muloqotda xatolik bo'ldi. Xato: {str(e)}"
