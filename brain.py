@@ -21,4 +21,4 @@ def get_ai_answer(user_input):
             return answer
         return "Kechirasiz, muloqotda xatolik bo'ldi."
     except:
-        return "Hozircha javob bera olmayman."
+        return 
