@@ -1,21 +1,24 @@
-import google.generativeai as genai
+import requests
 
-# Siz yuborgan yangi va haqiqiy API kalit
-API_KEY = "AIzaSyAZm4Ei9_Q4jUqich9sg7EpcWgmZJUYg2I"
-genai.configure(api_key=API_KEY)
-
-# Gemini 1.5 Flash - eng aqlli va tezkor LLM modelini ulaymiz
-model = genai.GenerativeModel('gemini-1.5-flash')
-
-# Suhbat tarixi (xotira) uchun chat sessiyasini boshlaymiz
-chat_session = model.start_chat(history=[])
+# Siz yuborgan Hugging Face Access Token
+HF_TOKEN = "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"
+# Mistral modeli - aqlli va erkin muloqot qiladi
+API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
+headers = {"Authorization": f"Bearer {HF_TOKEN}"}
 
 def get_ai_answer(user_input):
-    """Google Gemini orqali har qanday savolga men kabi aqlli javob berish"""
+    """Hugging Face orqali har qanday savolga javob berish"""
+    payload = {
+        "inputs": f"<s>[INST] {user_input} [/INST]",
+        "parameters": {"max_new_tokens": 500, "temperature": 0.7}
+    }
     try:
-        # AI-dan javob so'raymiz
-        response = chat_session.send_message(user_input)
-        return response.text
-    except Exception as e:
-        # Agar kalitda yoki ulanishda xato bo'lsa, xatoni aniq ko'rsatadi
-        return f"Kechirasiz, muloqotda xatolik bo'ldi. Xato: {str(e)}"
+        response = requests.post(API_URL, headers=headers, json=payload)
+        output = response.json()
+        if isinstance(output, list) and len(output) > 0:
+            full_text = output[0].get('generated_text', '')
+            answer = full_text.split('[/INST]')[-1].strip()
+            return answer
+        return "Kechirasiz, muloqotda xatolik bo'ldi."
+    except:
+        return "Hozircha javob bera olmayman."
