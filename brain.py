@@ -1,22 +1,14 @@
 import streamlit as st
-import requests
+import google.generativeai as genai
 
-# Kalitni kod ichidan butunlay yo'qotdik, endi uni Secrets'dan o'qiydi
-HF_TOKEN = st.secrets["HF_TOKEN"]
+# Streamlit Secrets'dan kalitni xavfsiz o'qib olamiz
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+genai.configure(api_key=GOOGLE_API_KEY)
 
-API_URL = "https://api-inference.huggingface.co/models/Mistralai/Mistral-7B-Instruct-v0.2"
-headers = {"Authorization": f"Bearer {HF_TOKEN}"}
-
-def get_ai_answer(user_input):
+def get_ai_answer(user_question):
     try:
-        payload = {"inputs": f"<s>[INST] {user_input} [/INST]"}
-        response = requests.post(API_URL, headers=headers, json=payload)
-        output = response.json()
-        
-        if isinstance(output, list) and len(output) > 0:
-            full_text = output[0].get('generated_text', '')
-            answer = full_text.split('[/INST]')[-1].strip()
-            return answer
-        return "Kechirasiz, muloqotda uzilish bo'ldi."
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(user_question)
+        return response.text
     except Exception as e:
-        return f"Mening miyamda texnik nosozlik: {str(e)}"
+        return f"Xatolik yuz berdi: {str(e)}"
